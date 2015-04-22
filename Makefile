@@ -5,20 +5,22 @@
 OUTPUT = standard
 # Test results format
 FORMAT = text
+# Tests
+TESTS = $(shell cat testlist.txt)
 
 
 PROJ	= u-testbench
-SRC	= main.c
-
-
-CFLAGS	    = -c   
-LDFLAGS	    = -static
+SRC	= 
+CFLAGS  = -c   
+LDFLAGS	= -static
 ################################################################################
 GIT_VERSION = $(shell git describe --dirty --always)
 GIT_TAG = $(shell git describe --abbrev=0 --tags)
 
-SRC += outputs/$(OUTPUT).c formats/$(FORMAT).c
-
+SRC +=	testbench/testbench.c \
+	testbench/outputs/$(OUTPUT).c \
+	testbench/formats/$(FORMAT).c \
+	$(addsuffix .c, $(TESTS))
 
 EXECUTABLE = $(PROJ)
 
