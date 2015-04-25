@@ -32,3 +32,5 @@
 *.dSYM/
 
 nbproject/
+
+testlist.c
