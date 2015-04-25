@@ -17,5 +17,13 @@ int main(
     int     argc,
     char ** argv)
 {
+    testbench_test_t ** pos = testbench_testlist;
+    
+    while(0 != (*pos))
+    {
+        (*pos)->test_fcn(*pos);
+        pos ++;
+    }
+    
     return 0;
 }
