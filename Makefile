@@ -32,6 +32,23 @@ CFLAGS  += -D_DEBUG -ggdb -Wall
 LDFLAGS += -ggdb   
 OBJ = $(SRC:.c=.o)
 
+### Build testlist.c
+COMMA =,
+TESTVARPREFIX = testbenchtest_
+define TESTLIST_C
+#include "testbench/testbench.h"
+
+ $(addprefix extern testbench_test_t $(TESTVARPREFIX), $(addsuffix ;
+,$(TESTS)))
+
+testbench_test_t * testbench_testlist[] = 
+{
+    $(addsuffix $(COMMA)
+   ,$(addprefix &$(TESTVARPREFIX),$(TESTS)))(testbench_test_t *)0
+};
+endef
+export TESTLIST_C
+
 .PHONY: all clean postbuild
 
 
@@ -44,7 +61,7 @@ $(EXECUTABLE): $(OBJ)
 	$(CC) $(CFLAGS) $< -o $@
 	
 testlist.c: testlist.txt
-	touch testlist.c
+	@echo "$$TESTLIST_C" > testlist.c
 	
 clean:
 	$(RM) $(EXECUTABLE) $(OBJ) $(OBR) testlist.c

@@ -12,7 +12,13 @@
 extern "C" {
 #endif
     
-    
+typedef struct
+{
+    const char * name;
+    unsigned passed;
+    unsigned failed;    
+    void (*test_fcn)(void);
+} testbench_test_t;
 
 
 

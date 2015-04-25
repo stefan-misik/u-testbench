@@ -9,6 +9,7 @@
 #include "formats.h"
 #include "outputs.h"
 
+extern testbench_test_t * testbench_testlist[];
 
 
 /******************************************************************************/
