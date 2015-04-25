@@ -32,6 +32,7 @@ CFLAGS  += -D_DEBUG -ggdb -Wall
 LDFLAGS += -ggdb   
 OBJ = $(SRC:.c=.o)
 
+################################################################################
 ### Build testlist.c
 COMMA =,
 TESTVARPREFIX = testbenchtest_
@@ -48,6 +49,7 @@ testbench_test_t * testbench_testlist[] =
 };
 endef
 export TESTLIST_C
+################################################################################
 
 .PHONY: all clean postbuild
 
