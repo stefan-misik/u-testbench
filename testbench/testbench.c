@@ -21,19 +21,43 @@ int main(
     passed = 0;
     failed = 0;
     
+    /* Print header */
+    testbench_begin_test(
+        (const char *)0
+    );
+    
     /* Iterate through all the tests */
     while(0 != (*pos))
     {
+        /* Print header */
+        testbench_begin_test(
+            (*pos)->name
+        );
+        
         /* Perform test */
         (*pos)->test_fcn(*pos);
         
+        /* Print footer */
+        testbench_end_test(
+            (*pos)->name,
+            (*pos)->passed,
+            (*pos)->failed
+        );
+        
         /* Count results */
         passed += (*pos)->passed;
-        failed += (*pos)->failed;
+        failed += (*pos)->failed;        
         
         /* Move to another test */
         pos ++;
     }
+    
+    /* Print footer */
+    testbench_end_test(
+        (const char *)0,
+        passed,
+        failed
+    );
     
     return 0;
 }

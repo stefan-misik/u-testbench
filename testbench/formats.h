@@ -23,6 +23,28 @@ void testbench_log(
     int result
 );
 
+/**
+ * \brief Print header of a test
+ * 
+ * \param[in] name Name of the test
+ */
+void testbench_begin_test(
+    const char * name
+);
+
+/**
+ * \brief Print footer of a test
+ * 
+ * \param[in] name      Name of the test
+ * \param[in] passed    Number of passed tests
+ * \param[in] failed    number of failed tests
+ */
+void testbench_end_test(
+    const char * name,
+    unsigned passed,
+    unsigned failed
+);
+
 
 #endif	/* FORMATS_H_ */
 

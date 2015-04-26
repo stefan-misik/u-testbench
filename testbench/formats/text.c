@@ -16,3 +16,21 @@ void testbench_log(
 {
     
 }
+
+/******************************************************************************/
+void testbench_begin_test(
+    const char * name
+)
+{
+    
+}
+
+/******************************************************************************/
+void testbench_end_test(
+    const char * name,
+    unsigned passed,
+    unsigned failed
+)
+{
+    
+}
