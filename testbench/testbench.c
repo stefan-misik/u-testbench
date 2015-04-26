@@ -17,10 +17,17 @@ int main(
     char ** argv)
 {
     testbench_test_t ** pos = testbench_testlist;
+    unsigned passed, failed;
+    passed = 0;
+    failed = 0;
     
     while(0 != (*pos))
     {
         (*pos)->test_fcn(*pos);
+        
+        passed += (*pos)->passed;
+        failed += (*pos)->failed;
+        
         pos ++;
     }
     
@@ -29,15 +36,26 @@ int main(
 
 /******************************************************************************/
 void testbench_result(
+    testbench_test_t * this_test,
     const char * test_name,
     int result
 )
 {
     testbench_log(test_name, result);
+    
+    if(result)
+    {
+        this_test->passed++;
+    }
+    else
+    {
+        this_test->failed++;
+    }
 }
 
 /******************************************************************************/
 void testbench_eq_tol(
+    testbench_test_t * this_test,
     const char * test_name,
     double a,
     double b,
@@ -50,7 +68,8 @@ void testbench_eq_tol(
     res = a - b;
     
     /* Log results */
-    testbench_log(
+    testbench_result(
+        this_test,
         test_name,
         (res <= tol) && (res >= -tol)
     );    
@@ -58,6 +77,7 @@ void testbench_eq_tol(
 
 /******************************************************************************/
 void testbench_neq_tol(
+    testbench_test_t * this_test,
     const char * test_name,
     double a,
     double b,
@@ -70,7 +90,8 @@ void testbench_neq_tol(
     res = a - b;
     
     /* Log results */
-    testbench_log(
+    testbench_result(
+        this_test,    
         test_name,
         (res > tol) || (res < -tol)
     );    

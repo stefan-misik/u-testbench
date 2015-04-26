@@ -17,16 +17,18 @@ extern "C" {
 /**
  * \brief Compare two numbers
  */
-#define testbench_eq(test_name, a, b)               \
+#define testbench_eq(this_test, test_name, a, b)    \
     testbench_result(                               \
+        this_test,                                  \
         test_name,                                  \
         (a) == (b))         
 
 /**
  * \brief Compare two numbers
  */
-#define testbench_neq(test_name, a, b)              \
+#define testbench_neq(this_test, test_name, a, b)   \
     testbench_result(                               \
+        this_test,                                  \
         test_name,                                  \
         (a) != (b))         
     
@@ -68,6 +70,7 @@ typedef struct testbench_test
  * \param[in] result    Result of the test 0 = failed, 1 = passed 
  */
 void testbench_result(
+    testbench_test_t * this_test,
     const char * test_name,
     int result
 );
@@ -81,6 +84,7 @@ void testbench_result(
  * \param[in] tol       Tolerance, must be positive number
  */
 void testbench_eq_tol(
+    testbench_test_t * this_test,
     const char * test_name,
     double a,
     double b,
@@ -96,6 +100,7 @@ void testbench_eq_tol(
  * \param[in] tol       Tolerance
  */
 void testbench_neq_tol(
+    testbench_test_t * this_test,
     const char * test_name,
     double a,
     double b,

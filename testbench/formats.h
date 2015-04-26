@@ -9,6 +9,7 @@
 #define	FORMATS_H_
 
 #include "outputs.h"
+#include "testbench.h"
 
 
 /**
