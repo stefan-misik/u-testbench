@@ -26,6 +26,9 @@ void testbench_log(
 /**
  * \brief Print header of a test
  * 
+ * This function will cause the header to be printed, if the name parameter is 
+ * zero-pointer, the initial message will be printed out.
+ * 
  * \param[in] name Name of the test
  */
 void testbench_begin_test(
@@ -34,6 +37,9 @@ void testbench_begin_test(
 
 /**
  * \brief Print footer of a test
+ * 
+ * This function will cause the footer to be printed, if the name parameter is 
+ * zero-pointer, the summary message will be printed out.
  * 
  * \param[in] name      Name of the test
  * \param[in] passed    Number of passed tests
