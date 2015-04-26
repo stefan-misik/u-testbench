@@ -21,13 +21,17 @@ int main(
     passed = 0;
     failed = 0;
     
+    /* Iterate through all the tests */
     while(0 != (*pos))
     {
+        /* Perform test */
         (*pos)->test_fcn(*pos);
         
+        /* Count results */
         passed += (*pos)->passed;
         failed += (*pos)->failed;
         
+        /* Move to another test */
         pos ++;
     }
     
