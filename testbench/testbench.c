@@ -6,8 +6,7 @@
  */
 
 #include "testbench.h"
-#include "formats.h"
-#include "outputs.h"
+
 
 extern testbench_test_t * testbench_testlist[];
 
@@ -26,4 +25,53 @@ int main(
     }
     
     return 0;
+}
+
+/******************************************************************************/
+void testbench_result(
+    const char * test_name,
+    int result
+)
+{
+    testbench_log(test_name, result);
+}
+
+/******************************************************************************/
+void testbench_eq_tol(
+    const char * test_name,
+    double a,
+    double b,
+    double tol
+)
+{
+    double res;
+    
+    /* Calculate distance */
+    res = a - b;
+    
+    /* Log results */
+    testbench_log(
+        test_name,
+        (res <= tol) && (res >= -tol)
+    );    
+}
+
+/******************************************************************************/
+void testbench_neq_tol(
+    const char * test_name,
+    double a,
+    double b,
+    double tol
+)
+{
+    double res;
+    
+    /* Calculate distance */
+    res = a - b;
+    
+    /* Log results */
+    testbench_log(
+        test_name,
+        (res > tol) || (res < -tol)
+    );    
 }

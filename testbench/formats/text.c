@@ -6,3 +6,13 @@
  */
 
 #include "../formats.h"
+
+
+/******************************************************************************/
+void testbench_log(
+    const char * test_name,
+    int result
+)
+{
+    
+}

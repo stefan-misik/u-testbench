@@ -8,9 +8,27 @@
 #ifndef TESTBENCH_H_
 #define	TESTBENCH_H_
 
+#include "formats.h"
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
+    
+/**
+ * \brief Compare two numbers
+ */
+#define testbench_eq(test_name, a, b)               \
+    testbench_result(                               \
+        test_name,                                  \
+        (a) == (b))         
+
+/**
+ * \brief Compare two numbers
+ */
+#define testbench_neq(test_name, a, b)              \
+    testbench_result(                               \
+        test_name,                                  \
+        (a) != (b))         
     
 /**
  * \brief Macro to create test function and its structure
@@ -43,8 +61,46 @@ typedef struct testbench_test
 } testbench_test_t;
 
 
+/**
+ * \brief write test result directly
+ * 
+ * \param[in] test_name String describing the test
+ * \param[in] result    Result of the test 0 = failed, 1 = passed 
+ */
+void testbench_result(
+    const char * test_name,
+    int result
+);
 
+/**
+ * \brief Compare two floating point numbers with tolerance
+ * 
+ * \param[in] test_name String describing the test
+ * \param[in] a         Number A
+ * \param[in] b         Number B
+ * \param[in] tol       Tolerance, must be positive number
+ */
+void testbench_eq_tol(
+    const char * test_name,
+    double a,
+    double b,
+    double tol
+);
 
+/**
+ * \brief Compare two floating point numbers with tolerance
+ * 
+ * \param[in] test_name String describing the test
+ * \param[in] a         Number A
+ * \param[in] b         Number B
+ * \param[in] tol       Tolerance
+ */
+void testbench_neq_tol(
+    const char * test_name,
+    double a,
+    double b,
+    double tol
+);
 
 #ifdef	__cplusplus
 }
