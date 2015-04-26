@@ -9,12 +9,21 @@
 #define OUTPUTS_H_
 
 /**
- * \brief Write single byte to the test result output stream
- * 
- * \param[in] c Character to be written
+ * \brief Output stream initializer
  */
-void testbench_putchar(
-    char c
+void testbench_output_init(
+    void
+);
+
+/**
+ * \brief Write buffer into output stream
+ * 
+ * \param[in] buf   Buffer containig data to be written
+ * \param[in] len   Number of characters to be written
+ */
+void testbench_write(
+    const char * buf,
+    unsigned len
 );
 
 #endif /* OUTPUTS_H_ */

@@ -11,6 +11,12 @@
 #include "outputs.h"
 #include "testbench.h"
 
+/**
+ * \brief Output format initializer
+ */
+void testbench_format_init(
+    void
+);
 
 /**
  * \brief Write test result

@@ -21,6 +21,12 @@ int main(
     passed = 0;
     failed = 0;
     
+    /* Initialize output */
+    testbench_output_init();
+    
+    /* Initialize format */
+    testbench_format_init();
+    
     /* Print header */
     testbench_begin_test(
         (const char *)0
