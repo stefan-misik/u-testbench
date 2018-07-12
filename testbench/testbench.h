@@ -17,7 +17,7 @@ extern "C" {
 /**
  * \brief Compare two numbers
  */
-#define testbench_eq(this_test, test_name, a, b)    \
+#define testbench_eq(test_name, a, b)               \
     testbench_result(                               \
         this_test,                                  \
         test_name,                                  \
@@ -26,27 +26,45 @@ extern "C" {
 /**
  * \brief Compare two numbers
  */
-#define testbench_neq(this_test, test_name, a, b)   \
+#define testbench_neq(test_name, a, b)              \
     testbench_result(                               \
         this_test,                                  \
         test_name,                                  \
         (a) != (b))         
-    
+
+/**
+ * \brief Compare two floating point numbers
+ */
+#define testbench_eq_tol(test_name, a, b, tol)      \
+    testbench_eq_tol_hidden(                        \
+        this_test,                                  \
+        test_name,                                  \
+        a, b, tol)
+   
+/**
+ * \brief Compare two floating point numbers
+ */
+#define testbench_neq_tol(test_name, a, b, tol)     \
+    testbench_neq_tol_hidden(                       \
+        this_test,                                  \
+        test_name,                                  \
+        a, b, tol)
+
 /**
  * \brief Macro to create test function and its structure
  */
-#define TESTBENCH_TEST(test_name)                   \
-    static void test_name ## _fcn(                  \
+#define TESTBENCH_TEST(test_name, test_name_str)    \
+    static void test_name ## _testbench_fcn(        \
         testbench_test_t * this_test                \
     );                                              \
     testbench_test_t testbenchtest_ ## test_name =  \
     {                                               \
-        .name = #test_name,                         \
+        .name = (test_name_str),                    \
         .passed = 0,                                \
         .failed = 0,                                \
-        .test_fcn = test_name ## _fcn               \
+        .test_fcn = test_name ## _testbench_fcn     \
     };                                              \
-    static void test_name ## _fcn(                  \
+    static void test_name ## _testbench_fcn(        \
         testbench_test_t * this_test                \
     )                                               
     
@@ -83,7 +101,7 @@ void testbench_result(
  * \param[in] b         Number B
  * \param[in] tol       Tolerance, must be positive number
  */
-void testbench_eq_tol(
+void testbench_eq_tol_hidden(
     testbench_test_t * this_test,
     const char * test_name,
     double a,
@@ -99,7 +117,7 @@ void testbench_eq_tol(
  * \param[in] b         Number B
  * \param[in] tol       Tolerance
  */
-void testbench_neq_tol(
+void testbench_neq_tol_hidden(
     testbench_test_t * this_test,
     const char * test_name,
     double a,

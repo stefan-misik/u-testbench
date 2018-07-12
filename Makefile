@@ -1,12 +1,16 @@
+#!/usr/bin/make -f
 # Makefile for pc part of u-testbench
 # Author: Stefan Misik (mail@stefanmisik.eu)
+
+# Module-Under Test
+MUT     = 
+# Test Source Files
+TESTSRC = $(sort $(wildcard tests/*.c) $(wildcard tests/*.cpp))
 
 # Test results output type
 OUTPUT = standard
 # Test results format
 FORMAT = text
-# Tests
-TESTS = $(shell cat testlist.txt)
 # Other build results (e.g. .hex file if deploying on embedded platform)
 OBR =
 
@@ -17,20 +21,22 @@ SRC	=
 CFLAGS  = -c   
 LDFLAGS	= -static
 
-GIT_VERSION = $(shell git describe --dirty --always)
-GIT_TAG = $(shell git describe --abbrev=0 --tags)
+# Grep the list of tests from the test source files
+TESTS = $(foreach TEST,$(TESTSRC),\
+$(shell grep -oP '^\s*TESTBENCH_TEST\(\K[a-zA-Z0-9_]+(?=,.*\))' $(TEST)))
 
 SRC +=	testbench/testbench.c \
 	testbench/outputs/$(OUTPUT).c \
 	testbench/formats/$(FORMAT).c \
-	$(addsuffix .c, $(TESTS)) \
-	testlist.c
+	$(TESTSRC) _testlist.c $(MUT)
 
 EXECUTABLE = $(PROJ)
 
 CFLAGS  += -D_DEBUG -ggdb -Wall
 LDFLAGS += -ggdb   
-OBJ = $(SRC:.c=.o)
+OBJ = $(addsuffix .o,$(basename $(SRC)))
+
+# List of directories containing object files
 
 ################################################################################
 ### Build testlist.c
@@ -40,12 +46,12 @@ define TESTLIST_C
 #include "testbench/testbench.h"
 
  $(addprefix extern testbench_test_t $(TESTVARPREFIX), $(addsuffix ;
-,$(TESTS)))
+,$(basename $(TESTS))))
 
 testbench_test_t * testbench_testlist[] = 
 {
     $(addsuffix $(COMMA)
-   ,$(addprefix &$(TESTVARPREFIX),$(TESTS)))(testbench_test_t *)0
+   ,$(addprefix &$(TESTVARPREFIX),$(basename $(TESTS))))(testbench_test_t *)0
 };
 endef
 export TESTLIST_C
@@ -57,16 +63,19 @@ export TESTLIST_C
 all: $(EXECUTABLE) postbuild
 
 $(EXECUTABLE): $(OBJ)
-	$(CC) $(LDFLAGS) $(OBJ) -o $@
+	$(CXX) $(LDFLAGS) $(OBJ) -o $@
 
 %.o: %.c	
 	$(CC) $(CFLAGS) $< -o $@
+
+%.o: %.cpp
+	$(CXX) $(CFLAGS) $< -o $@
 	
-testlist.c: testlist.txt
-	@echo "$$TESTLIST_C" > testlist.c
+_testlist.c: $(TESTSRC)
+	@echo "$$TESTLIST_C" > $@
 	
 clean:
-	$(RM) $(EXECUTABLE) $(OBJ) $(OBR) testlist.c
+	$(RM) $(EXECUTABLE) $(OBJ) $(OBR) _testlist.c
 
 ################################################################################
 # Here cen by done other post-build operation e.g. generation of .hex file

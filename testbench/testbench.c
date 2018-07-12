@@ -88,7 +88,7 @@ void testbench_result(
 }
 
 /******************************************************************************/
-void testbench_eq_tol(
+void testbench_eq_tol_hidden(
     testbench_test_t * this_test,
     const char * test_name,
     double a,
@@ -110,7 +110,7 @@ void testbench_eq_tol(
 }
 
 /******************************************************************************/
-void testbench_neq_tol(
+void testbench_neq_tol_hidden(
     testbench_test_t * this_test,
     const char * test_name,
     double a,

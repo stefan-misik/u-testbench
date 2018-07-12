@@ -6,6 +6,8 @@
  */
 
 #include "../formats.h"
+#include <stdio.h>
+#include <string.h>
 
 /**
  * \brief Width of console in characters
@@ -13,36 +15,38 @@
 #define CONSOLE_WIDTH 80
 
 /**
+ * \brief Maximum digits of PASS/FAIL counts
+ */
+#define PASS_FAIL_CNT_LEN 10
+
+
+/**
  * \brief Passed string
  */
 static const char output_passed[] = "PASS";
-
 /**
  * \brief Failed string
  */
 static const char output_failed[] = "FAIL";
 
 /**
- * \brief 
+ * \brief Output separator
+ * 
+ * The first character of the initializer will be repeated over the whole
+ * console width.
  */
-static char output_separator[CONSOLE_WIDTH + 1];
+static char output_separator[CONSOLE_WIDTH + 1] = "=";
+
+/**
+ * \brief Passed string length
+ */
+static unsigned output_passed_len;
+/**
+ * \brief Failed string length
+ */
+static unsigned output_failed_len;
 
 
-/******************************************************************************/
-unsigned testbench_strlen(
-    const char * str
-)
-{
-    unsigned ret = 0;
-    
-    while(*str)
-    {
-        ret++;
-        str++;
-    }
-    
-    return ret;
-}
 
 /******************************************************************************/
 void testbench_format_init(
@@ -52,11 +56,15 @@ void testbench_format_init(
     unsigned i;
     
     /* Initialize separator */
-    for(i = 0; i < ((sizeof(output_separator) / sizeof(char)) - 1); i++)
+    for(i = 1; i < ((sizeof(output_separator) / sizeof(char)) - 1); i++)
     {
-        output_separator[i] = '*';
+        output_separator[i] = output_separator[0];
     }
     output_separator[i] = '\n';
+    
+    /* String lengths */
+    output_passed_len = strlen(output_passed);
+    output_failed_len = strlen(output_failed);
 }
 
 /******************************************************************************/
@@ -65,7 +73,34 @@ void testbench_log(
     int result
 )
 {
+    unsigned test_name_len, result_str_len;
+    int spaces_count, i;
+    const char * result_str;
     
+    /* String lengths */
+    test_name_len = strlen(test_name);
+    result_str_len = result ? output_passed_len : output_failed_len;
+    /* Result string */
+    result_str = result ? output_passed : output_failed;
+
+    if((test_name_len + result_str_len + 1) > CONSOLE_WIDTH)
+    {
+        test_name_len = CONSOLE_WIDTH - result_str_len - 1;
+    }
+    
+    /* Print test name, or portion of it */
+    testbench_write(test_name, test_name_len);
+    
+    /* Print spaces */
+    spaces_count = CONSOLE_WIDTH - (test_name_len + result_str_len);
+    for(i = 0; i < spaces_count; i++)
+        testbench_write(" ", 1);
+    
+    /* Print result */
+    testbench_write(result_str, result_str_len);
+    
+    /* Print new line */
+    testbench_write("\n", 1);
 }
 
 /******************************************************************************/
@@ -75,18 +110,25 @@ void testbench_begin_test(
 {
     if(name)
     {
-        testbench_write(
-            name, 
-            testbench_strlen(name)
-        );
-        
-        testbench_write("\n", 1);
-    
+        /* Print first separator */
         testbench_write(
             output_separator,
             (sizeof(output_separator) / sizeof(char))
         );
-    }    
+    
+        /* Print test name */
+        testbench_write(
+            name, 
+            strlen(name)
+        );
+        testbench_write("\n", 1);
+        
+        /* Print second separator */
+        testbench_write(
+            output_separator,
+            (sizeof(output_separator) / sizeof(char))
+        );
+    }
 }
 
 /******************************************************************************/
@@ -96,5 +138,32 @@ void testbench_end_test(
     unsigned failed
 )
 {
+    char buffer[PASS_FAIL_CNT_LEN + 8];
+    int buffered_chars;
     
+    /* Print separator */
+    testbench_write(
+        output_separator,
+        (sizeof(output_separator) / sizeof(char))
+    );
+    if(!name)
+    {
+        testbench_write(
+            output_separator,
+            (sizeof(output_separator) / sizeof(char))
+        );
+    }
+    
+    /* Print summary */
+    testbench_write(output_passed, output_passed_len);
+    buffered_chars = sprintf(buffer, ":  %u\n", passed);
+    testbench_write(buffer, buffered_chars);
+    testbench_write(output_failed, output_failed_len);
+    buffered_chars = sprintf(buffer, ":  %u\n", failed);
+    testbench_write(buffer, buffered_chars);
+    
+    if(name)
+    {
+        testbench_write("\n", 1);
+    }
 }
