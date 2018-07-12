@@ -15,13 +15,22 @@ extern "C" {
 #endif
     
 /**
+ * \brief Compare two objects using specified operator
+ */
+#define testbench_assert(test_name, exp)            \
+    testbench_result(                               \
+        this_test,                                  \
+        test_name,                                  \
+        (exp))
+    
+/**
  * \brief Compare two numbers
  */
 #define testbench_eq(test_name, a, b)               \
     testbench_result(                               \
         this_test,                                  \
         test_name,                                  \
-        (a) == (b))         
+        (a) == (b))
 
 /**
  * \brief Compare two numbers
@@ -30,7 +39,7 @@ extern "C" {
     testbench_result(                               \
         this_test,                                  \
         test_name,                                  \
-        (a) != (b))         
+        (a) != (b))
 
 /**
  * \brief Compare two floating point numbers
@@ -53,19 +62,19 @@ extern "C" {
 /**
  * \brief Macro to create test function and its structure
  */
-#define TESTBENCH_TEST(test_name, test_name_str)    \
-    static void test_name ## _testbench_fcn(        \
-        testbench_test_t * this_test                \
-    );                                              \
-    testbench_test_t testbenchtest_ ## test_name =  \
-    {                                               \
-        .name = (test_name_str),                    \
-        .passed = 0,                                \
-        .failed = 0,                                \
-        .test_fcn = test_name ## _testbench_fcn     \
-    };                                              \
-    static void test_name ## _testbench_fcn(        \
-        testbench_test_t * this_test                \
+#define TESTBENCH_TEST_CASE(test_name, test_name_str) \
+    static void test_name ## _testbench_fcn(          \
+        testbench_test_t * this_test                  \
+    );                                                \
+    testbench_test_t testbenchtest_ ## test_name =    \
+    {                                                 \
+        .name = (test_name_str),                      \
+        .passed = 0,                                  \
+        .failed = 0,                                  \
+        .test_fcn = test_name ## _testbench_fcn       \
+    };                                                \
+    static void test_name ## _testbench_fcn(          \
+        testbench_test_t * this_test                  \
     )                                               
     
 

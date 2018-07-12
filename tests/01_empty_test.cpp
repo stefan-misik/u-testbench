@@ -1,7 +1,7 @@
 #include "../testbench/testbench.h"
 
 /* Test begins here */
-TESTBENCH_TEST(empty_test, "An empty test")
+TESTBENCH_TEST_CASE(empty_test, "An empty test")
 {
         
     testbench_eq("Passed test test", 5, 5);
@@ -12,7 +12,7 @@ TESTBENCH_TEST(empty_test, "An empty test")
 }
 
 /* Test begins here */
-TESTBENCH_TEST(empty_test_2, "An empty test 2")
+TESTBENCH_TEST_CASE(empty_test_2, "An empty test 2")
 {
         
     testbench_eq("Passed test test", 5, 5);

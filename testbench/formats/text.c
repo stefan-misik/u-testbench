@@ -30,12 +30,20 @@ static const char output_passed[] = "PASS";
 static const char output_failed[] = "FAIL";
 
 /**
- * \brief Output separator
+ * \brief Output separator 1
  * 
  * The first character of the initializer will be repeated over the whole
  * console width.
  */
-static char output_separator[CONSOLE_WIDTH + 1] = "=";
+static char output_separator_1[CONSOLE_WIDTH + 1] = "=";
+
+/**
+ * \brief Output separator 2
+ * 
+ * The first character of the initializer will be repeated over the whole
+ * console width.
+ */
+static char output_separator_2[CONSOLE_WIDTH + 1] = "-";
 
 /**
  * \brief Passed string length
@@ -56,11 +64,13 @@ void testbench_format_init(
     unsigned i;
     
     /* Initialize separator */
-    for(i = 1; i < ((sizeof(output_separator) / sizeof(char)) - 1); i++)
+    for(i = 1; i < CONSOLE_WIDTH; i++)
     {
-        output_separator[i] = output_separator[0];
+        output_separator_1[i] = output_separator_1[0];
+        output_separator_2[i] = output_separator_2[0];
     }
-    output_separator[i] = '\n';
+    output_separator_1[i] = '\n';
+    output_separator_2[i] = '\n';
     
     /* String lengths */
     output_passed_len = strlen(output_passed);
@@ -112,8 +122,8 @@ void testbench_begin_test(
     {
         /* Print first separator */
         testbench_write(
-            output_separator,
-            (sizeof(output_separator) / sizeof(char))
+            output_separator_1,
+            (sizeof(output_separator_1) / sizeof(char))
         );
     
         /* Print test name */
@@ -125,8 +135,8 @@ void testbench_begin_test(
         
         /* Print second separator */
         testbench_write(
-            output_separator,
-            (sizeof(output_separator) / sizeof(char))
+            output_separator_2,
+            (sizeof(output_separator_2) / sizeof(char))
         );
     }
 }
@@ -142,15 +152,22 @@ void testbench_end_test(
     int buffered_chars;
     
     /* Print separator */
-    testbench_write(
-        output_separator,
-        (sizeof(output_separator) / sizeof(char))
-    );
-    if(!name)
+    if(name)
     {
         testbench_write(
-            output_separator,
-            (sizeof(output_separator) / sizeof(char))
+            output_separator_1,
+            (sizeof(output_separator_1) / sizeof(char))
+        );
+    }
+    else
+    {
+        testbench_write(
+            output_separator_1,
+            (sizeof(output_separator_1) / sizeof(char))
+        );
+        testbench_write(
+            output_separator_1,
+            (sizeof(output_separator_1) / sizeof(char))
         );
     }
     

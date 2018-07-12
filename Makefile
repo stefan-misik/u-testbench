@@ -3,7 +3,9 @@
 # Author: Stefan Misik (mail@stefanmisik.eu)
 
 # Module-Under Test
-MUT     = 
+MUT     =
+# Stubs
+STUBSRC =
 # Test Source Files
 TESTSRC = $(sort $(wildcard tests/*.c) $(wildcard tests/*.cpp))
 
@@ -23,12 +25,12 @@ LDFLAGS	= -static
 
 # Grep the list of tests from the test source files
 TESTS = $(foreach TEST,$(TESTSRC),\
-$(shell grep -oP '^\s*TESTBENCH_TEST\(\K[a-zA-Z0-9_]+(?=,.*\))' $(TEST)))
+$(shell grep -oP '^\s*TESTBENCH_TEST_CASE\(\K[a-zA-Z0-9_]+(?=,.*\))' $(TEST)))
 
 SRC +=	testbench/testbench.c \
 	testbench/outputs/$(OUTPUT).c \
 	testbench/formats/$(FORMAT).c \
-	$(TESTSRC) _testlist.c $(MUT)
+	$(TESTSRC) $(STUBSRC) _testlist.c $(MUT)
 
 EXECUTABLE = $(PROJ)
 
@@ -45,7 +47,7 @@ TESTVARPREFIX = testbenchtest_
 define TESTLIST_C
 #include "testbench/testbench.h"
 
- $(addprefix extern testbench_test_t $(TESTVARPREFIX), $(addsuffix ;
+$(addprefix extern testbench_test_t $(TESTVARPREFIX), $(addsuffix ;
 ,$(basename $(TESTS))))
 
 testbench_test_t * testbench_testlist[] = 
