@@ -17,7 +17,7 @@ extern "C" {
 /**
  * \brief Compare two objects using specified operator
  */
-#define testbench_assert(test_name, exp)            \
+#define testbench_is_true(test_name, exp)           \
     testbench_result(                               \
         this_test,                                  \
         test_name,                                  \

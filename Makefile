@@ -25,7 +25,7 @@ LDFLAGS	= -static
 
 # Grep the list of tests from the test source files
 TESTS = $(foreach TEST,$(TESTSRC),\
-$(shell grep -oP '^\s*TESTBENCH_TEST_CASE\(\K[a-zA-Z0-9_]+(?=,.*\))' $(TEST)))
+$(shell grep -oP '^\s*TESTBENCH_TEST_CASE\(\K[a-zA-Z0-9_]+(?=,.*\)?)' $(TEST)))
 
 SRC +=	testbench/testbench.c \
 	testbench/outputs/$(OUTPUT).c \
